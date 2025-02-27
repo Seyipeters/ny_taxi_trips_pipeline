@@ -3,7 +3,6 @@
 This project automates the ETL (Extract, Transform, Load) process for New York City Yellow and Green taxi trip data. The pipeline extracts data in Parquet format from the NYC taxi website, transforms it, and loads it into Google BigQuery for analysis and visualization.
 
 ## Table of Contents
-- [Project Overview](#project-overview)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
 - [Project Workflow](#project-workflow)
@@ -12,9 +11,6 @@ This project automates the ETL (Extract, Transform, Load) process for New York C
 - [Contributing](#contributing)
 - [License](#license)
 
-## Project Overview
-
-This project automates the ETL (Extract, Transform, Load) process for New York City Yellow and Green taxi trip data. The pipeline extracts data in Parquet format from the NYC taxi website, transforms it, and loads it into Google BigQuery for analysis and visualization.
 
 ## Project Structure
 
@@ -24,9 +20,7 @@ ny_taxi_trips_pipeline/
 ├── README.md
 ├── data/
 ├── scripts/
-│   ├── extract.py
-│   ├── transform.py
-│   └── load.py
+│   ├── ingest_taxi_data.py
 ├── terraform/
 │   ├── schemas/
 │   │   ├── yellow_taxi_schema.json
@@ -34,7 +28,32 @@ ny_taxi_trips_pipeline/
 │   ├── main.tf
 │   ├── variables.tf
 │   └── outputs.tf
-└── LICENSE
+```
+ny_taxi_trips_pipeline/
+├── Dockerfile
+├── README.md
+├── data/
+├── scripts/
+│   ├── ingest_taxi_data.py
+├── terraform/
+├── schemas/
+├── yellow_taxi_schema.json
+│   └── green_taxi_schema.json
+├── main.tf
+├── variables.tf
+└── outputs.tf
+```
+
+## BigQuery Optimization Strategies
+
+- **Partitioning & Clustering**: Improve query performance and reduce costs.
+- **Materialized Views**: Precompute and cache frequent queries.
+- **Query Caching**: Utilize BigQuery’s caching mechanism for efficiency.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+```
 ```
 
 ## Technologies Used
@@ -91,6 +110,3 @@ Ensure you have the following installed:
 
 Contributions are welcome! Please open an issue or submit a pull request for any changes.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
