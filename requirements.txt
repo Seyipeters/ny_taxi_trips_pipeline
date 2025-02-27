@@ -1,3 +1,4 @@
+#Create a requirements.txt file in the root of your project and add the following packages to it.
 pandas
 google-cloud-storage
 google-cloud-bigquery
