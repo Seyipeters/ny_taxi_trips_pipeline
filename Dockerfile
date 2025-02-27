@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 #Copy the python scripts into the container
 COPY ingest_taxi_data.py .
-COPY ny-taxi-trips-pipeline-9640b65ea078.json /tmp/service-account-file.json
+COPY ny-taxi-trips-pipeline-41c711650414.json /tmp/service-account-file.json
 
 #Set environment variables for the credentials file
 ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/service-account-file.json
