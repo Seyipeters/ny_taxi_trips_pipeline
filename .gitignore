@@ -41,3 +41,6 @@ terraform.rc
 terraform.rc    
 
 .json
+
+# Ignore csv files
+*.csv
