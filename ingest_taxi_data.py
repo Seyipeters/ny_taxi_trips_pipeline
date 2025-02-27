@@ -35,15 +35,15 @@ def transform_data(parquet_file, taxi_type):
 
         #Selecting only the columns defined in the schema
         required_columns = [
-            'VendorID', 
+            'vendorID', 
             'tpep_pickup_datetime',
             'tpep_dropoff_datetime',
-            'Passenger_count',
-            'Trip_distance',
-            'Payment_type',
-            'Fare_amount',
-            'Tip_amount',
-            'Total_amount'
+            'passenger_count',
+            'trip_distance',
+            'payment_type',
+            'fare_amount',
+            'tip_amount',
+            'total_amount'
         ]
         df = df[required_columns]
 
@@ -62,15 +62,15 @@ def transform_data(parquet_file, taxi_type):
 
         #Selecting only the columns defined in the schema
         required_columns = [
-            'VendorID', 
+            'vendorID', 
             'lpep_pickup_datetime',
             'lpep_dropoff_datetime',
-            'Passenger_count',
-            'Trip_distance',
-            'Payment_type',
-            'Fare_amount',
-            'Tip_amount',
-            'Total_amount'
+            'passenger_count',
+            'trip_distance',
+            'payment_type',
+            'fare_amount',
+            'tip_amount',
+            'total_amount'
         ]
         df = df[required_columns]
 
