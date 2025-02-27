@@ -35,7 +35,7 @@ def transform_data(parquet_file, taxi_type):
 
         #Selecting only the columns defined in the schema
         required_columns = [
-            'vendorID', 
+            'VendorID', 
             'tpep_pickup_datetime',
             'tpep_dropoff_datetime',
             'passenger_count',
@@ -62,7 +62,7 @@ def transform_data(parquet_file, taxi_type):
 
         #Selecting only the columns defined in the schema
         required_columns = [
-            'vendorID', 
+            'VendorID', 
             'lpep_pickup_datetime',
             'lpep_dropoff_datetime',
             'passenger_count',
