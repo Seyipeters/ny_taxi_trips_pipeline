@@ -29,20 +29,6 @@ ny_taxi_trips_pipeline/
 │   ├── variables.tf
 │   └── outputs.tf
 ```
-ny_taxi_trips_pipeline/
-├── Dockerfile
-├── README.md
-├── data/
-├── scripts/
-│   ├── ingest_taxi_data.py
-├── terraform/
-├── schemas/
-├── yellow_taxi_schema.json
-│   └── green_taxi_schema.json
-├── main.tf
-├── variables.tf
-└── outputs.tf
-```
 
 ## BigQuery Optimization Strategies
 
