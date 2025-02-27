@@ -80,7 +80,9 @@ def transform_data(parquet_file, taxi_type):
 
 
         #Drop rows with invalid total amount values
-        df
+        df = df[df['Total_amount'] > 0]
+
+        
 
 
     
