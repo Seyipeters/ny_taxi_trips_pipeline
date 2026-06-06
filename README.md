@@ -1,98 +1,116 @@
-# NY Taxi ETL Pipeline
+# NY Taxi Trips Pipeline
 
-This project automates the ETL (Extract, Transform, Load) process for New York City Yellow and Green taxi trip data. The pipeline extracts data in Parquet format from the NYC taxi website, transforms it, and loads it into Google BigQuery for analysis and visualization.
+A runnable data engineering project that downloads NYC yellow or green taxi trip data, standardizes the core trip fields, writes a clean output dataset locally, and can optionally append the result to BigQuery.
 
-## Table of Contents
-- [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Project Workflow](#project-workflow)
-- [Installation & Setup](#installation--setup)
-- [BigQuery Optimization Strategies](#bigquery-optimization-strategies)
-- [Contributing](#contributing)
-- [License](#license)
+## What this project demonstrates
 
+- downloading public parquet data from the NYC Taxi and Limousine Commission feed
+- cleaning and standardizing trip records with Python and pandas
+- exporting analytics-ready data to local parquet or CSV
+- optionally loading the transformed dataset into BigQuery
+- packaging the workflow in Docker without hard-coding cloud credentials
 
-## Project Structure
+## Tech stack
 
-```
+- Python
+- pandas
+- pyarrow
+- Docker
+- Google BigQuery (optional destination)
+
+## Repository structure
+
+```text
 ny_taxi_trips_pipeline/
+├── .gitignore
 ├── Dockerfile
+├── ingest_taxi_data.py
 ├── README.md
-├── data/
-├── scripts/
-│   ├── ingest_taxi_data.py
-├── terraform/
-│   ├── schemas/
-│   │   ├── yellow_taxi_schema.json
-│   │   └── green_taxi_schema.json
-│   ├── main.tf
-│   ├── variables.tf
-│   └── outputs.tf
+├── requirements.txt
+└── terraform/
+	├── main.tf
+	├── variables.tf
+	├── outputs.tf
+	└── schemas/
+		├── yellow_taxi_schema.json
+		└── green_taxi_schema.json
 ```
 
-## BigQuery Optimization Strategies
+## Pipeline flow
 
-- **Partitioning & Clustering**: Improve query performance and reduce costs.
-- **Materialized Views**: Precompute and cache frequent queries.
-- **Query Caching**: Utilize BigQuery’s caching mechanism for efficiency.
+1. Download the source parquet file for a chosen taxi type, year, and month.
+2. Keep the core trip columns used for analysis.
+3. Normalize timestamps and numeric fields.
+4. Drop invalid rows with missing required values or non-positive totals.
+5. Save the cleaned dataset locally.
+6. Optionally append the same dataset to a BigQuery table.
 
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
-```
-```
-
-## Technologies Used
-
-- **Python**: Data extraction and transformation
-- **Docker**: Containerized execution of the ETL pipeline
-- **Terraform**: Infrastructure as Code (IaC) for cloud resource management
-- **Google BigQuery**: Data storage and analysis
-
-## Project Workflow
-
-1. **Extract**: Download NYC taxi data (Yellow and Green taxis) from the NYC Taxi & Limousine Commission website.
-2. **Transform**: Process the raw data to ensure consistency and structure before loading.
-3. **Load**: Store the transformed data into Google BigQuery.
-4. **Analysis**: Utilize BigQuery best practices for optimized queries and cost-effective data processing.
-5. **Visualization**: Create dashboards for data insights.
-
-## Installation & Setup
+## Local usage
 
 ### Prerequisites
 
-Ensure you have the following installed:
-- Docker
-- Terraform
-- Google Cloud SDK (with authentication set up for BigQuery)
+- Python 3.9+
+- `pip install -r requirements.txt`
 
-### Steps
+### Save transformed data locally
 
-1. Clone this repository:
-    ```sh
-    git clone https://github.com/Seyipeters/ny_taxi_trips_pipeline.git
-    cd ny_taxi_trips_pipeline
-    ```
-2. Build and run the Docker container:
-    ```sh
-    docker build -t ny-taxi-loader .
-    docker run --rm ny-taxi-loader --year 2024 --month 1 --taxi-type yellow
-    ```
-3. Deploy infrastructure with Terraform:
-    ```sh
-    terraform init
-    terraform plan
-    terraform apply
-    ```
-4. Verify data in Google BigQuery and start analysis.
+```powershell
+python ingest_taxi_data.py --year 2024 --month 1 --taxi-type yellow
+```
 
-## BigQuery Optimization Strategies
+This writes a parquet file to `data/processed/` by default.
 
-- **Partitioning & Clustering**: Improve query performance and reduce costs.
-- **Materialized Views**: Precompute and cache frequent queries.
-- **Query Caching**: Utilize BigQuery’s caching mechanism for efficiency.
+### Save as CSV to a custom directory
 
-## Contributing
+```powershell
+python ingest_taxi_data.py --year 2024 --month 1 --taxi-type green --output-format csv --output-dir output
+```
 
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
+### Load to BigQuery
+
+Make sure your local environment is already authenticated for Google Cloud, then run:
+
+```powershell
+python ingest_taxi_data.py --year 2024 --month 1 --taxi-type yellow --table-id your-project.your_dataset.yellow_taxi
+```
+
+### Provision BigQuery infrastructure with Terraform
+
+```powershell
+cd terraform
+terraform init
+terraform apply -var="project_id=your-project" -var="dataset_id=ny_taxi_trips"
+```
+
+## Docker usage
+
+Build the image:
+
+```powershell
+docker build -t ny-taxi-loader .
+```
+
+Run the pipeline and write output into a local folder:
+
+```powershell
+docker run --rm -v ${PWD}/data:/app/data ny-taxi-loader --year 2024 --month 1 --taxi-type yellow
+```
+
+If you want BigQuery loading from Docker, mount your Google credentials and set `GOOGLE_APPLICATION_CREDENTIALS` at runtime instead of baking secrets into the image.
+
+## Recruiter-facing project value
+
+This project is useful in a data engineering portfolio because it shows:
+
+- ingestion from a public source
+- data cleaning and schema control
+- configurable outputs for batch processing
+- optional cloud warehouse loading without embedding credentials in source control
+
+## Next improvements
+
+- add automated tests for the transform function
+- parameterize partitioned BigQuery table creation
+- add orchestration with a scheduler such as Airflow or Prefect
+- add data quality assertions and row-count checks
 
